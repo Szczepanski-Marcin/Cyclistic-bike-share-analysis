@@ -263,7 +263,7 @@ It complements the Python and SQL analysis by allowing users to explore the patt
 
 ## Project Files
 
-The repository separates code, data, documentation, and visual outputs.
+The repository separates code, documentation, and visual outputs.
 
 - `notebooks/` — Python notebook for data preparation and analysis.
 - `sql/` — SQL scripts for database setup and business analysis.
