@@ -163,7 +163,7 @@ These patterns may be consistent with different use cases, but trip data alone c
 
 ### 5. Ride Duration
 
-![Ride duration distribution by rider type](figures/ride_duration_boxplot_60min.png)
+![Ride duration distribution by rider type](figures/ride_duration_histograms_annotated.png)
 
 Ride duration differs between the two rider groups.
 
