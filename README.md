@@ -268,7 +268,6 @@ The repository separates code, data, documentation, and visual outputs.
 - `notebooks/` — Python notebook for data preparation and analysis.
 - `sql/` — SQL scripts for database setup and business analysis.
 - `figures/` — Selected visualizations used in this README.
-- `reports/` — Supporting reports and notes.
 
 
 ## Reproducibility and Quality Assurance
