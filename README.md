@@ -2,139 +2,136 @@
 
 ## Project Overview
 
-This project analyses bike-share ride data to understand how **casual riders and annual members use Cyclistic differently**. The goal is to identify behavioural patterns that could help the marketing team develop and test strategies to convert casual riders into annual members.
+This project analyses more than 6 million bike-share rides to understand differences between casual riders and annual members. Using Python, SQL, and Tableau, I investigated riding patterns, compared rider behaviour, and identified potential opportunities for membership marketing.
 
-The analysis uses Python for data preparation and exploratory analysis, SQL for querying and summarising results, and Tableau for interactive visualisation.
+The project demonstrates a complete data analysis workflow, including data collection, cleaning, exploratory data analysis, SQL-based business analysis, dashboard development, and evidence-based recommendations.
 
 ## Business Objective
 
-Identify meaningful differences between casual riders and annual members and use the evidence to recommend testable marketing opportunities for increasing annual memberships.
+The objective is to understand how casual riders differ from annual members and use those findings to develop data-driven hypotheses for marketing campaigns that could encourage casual riders to become members.
 
-### Target Audience
+**Target audience:** Cyclistic marketing team and business decision-makers.
 
-Cyclistic's marketing team and business decision-makers.
+**Desired business outcome:** Identify promising campaign opportunities that can be tested and evaluated using membership conversion, acquisition cost, and retention metrics.
 
-### Research Questions
+## Research Questions
 
-1. How do ride volumes differ between casual riders and annual members?
-2. How do riding patterns vary by month, season, weekday, and hour?
-3. How do ride durations differ between the two groups?
-4. Do the groups show different preferences for electric and classic bikes?
-5. Which starting and ending stations are most frequently used by each group?
-6. How can these differences inform potential membership-conversion strategies?
+1. How do casual riders and annual members differ in overall riding activity?
+2. How does usage vary by month and season?
+3. How do riding patterns differ between weekdays and weekends?
+4. At what times of day are the two rider groups most active?
+5. Do the groups differ in ride duration?
+6. Do casual riders and members prefer different bike types?
+7. Which starting and ending stations are used most frequently by each group?
+8. What testable marketing opportunities can be derived from these patterns?
 
 ## Data Source and Scope
 
-**Source:** [Divvy Trip Data — Official Data Archive](https://divvy-tripdata.s3.amazonaws.com/index.html)
+The data comes from the official Divvy trip-data archive:
 
-The project uses monthly trip-data files covering **October 1, 2025, through September 30, 2026**, inclusive.
+[Divvy Trip Data — Official Data Archive](https://divvy-tripdata.s3.amazonaws.com/index.html)
 
-- **Unit of analysis:** One recorded ride.
-- **Main comparison:** Casual riders versus annual members.
-- **Rider classification:** `member_casual`.
-- **Tools:** Python, pandas, NumPy, Matplotlib, Seaborn, SQL, and Tableau.
-- **Analysis period:** Rides with start timestamps on or after October 1, 2025, and before October 1, 2026.
+The analysis covers rides starting between **October 1, 2025, and September 30, 2026**.
 
-The analysis describes recorded ride activity. Ride counts should not be interpreted as counts of unique customers.
+The unit of analysis is an individual ride. The rider classification is stored in `member_casual`, with the values `member` and `casual`.
+
+The dataset contains trip-level information such as ride start and end timestamps, bike type, station information, coordinates, and rider classification.
 
 ## Project Workflow
 
-1. Download the monthly source archives directly from the official data archive.
-2. Load and combine the monthly CSV files in Python.
-3. Inspect dataset dimensions, column types, missing values, and date coverage.
-4. Identify and remove exact duplicate records.
-5. Calculate ride durations and apply documented data-quality rules.
-6. Filter rides to the target analysis period.
-7. Examine missing station information.
-8. Create date and time features for analysis.
-9. Export the cleaned dataset for subsequent analysis.
-10. Conduct exploratory data analysis in Python.
-11. Query and summarise ride behaviour using SQL.
-12. Build an interactive Tableau dashboard.
-13. Interpret the findings and develop evidence-based recommendations.
+The project follows a structured data analysis process:
+
+1. Define the business problem, audience, and research questions.
+2. Acquire the monthly source files and inspect their structure.
+3. Combine, clean, and prepare the data in Python.
+4. Perform exploratory data analysis and create derived features.
+5. Use SQL to investigate business questions.
+6. Build an interactive Tableau dashboard.
+7. Interpret the findings and develop business recommendations.
+8. Validate outputs and document reproducibility considerations.
+9. Prepare the final portfolio presentation.
 
 ## Data Cleaning and Preparation
 
-The combined source dataset contained **6,171,785 rows and 13 columns** before duplicate removal and subsequent cleaning.
+The monthly source files were combined and processed in Python using Pandas and NumPy.
 
-### Duplicate Records
+Key preparation steps included:
 
-A total of **35 exact duplicate rows** were removed. Duplicate ride IDs were also checked separately as part of the data-quality assessment.
+- Combining the monthly files for the selected analysis period.
+- Inspecting column names, data types, missing values, and duplicate records.
+- Removing 35 duplicate rows.
+- Converting timestamps and calculating ride duration.
+- Removing negative-duration rides, rides shorter than one minute, and rides longer than 24 hours.
+- Retaining rides with a duration of exactly 24 hours.
+- Creating derived time features for monthly, seasonal, weekday, and hourly analysis.
+- Checking missing station information and its implications for station-level analysis.
+- Validating the cleaned dataset and exporting it for further analysis.
 
-### Ride Duration Filtering
+Duration thresholds are analytical filtering decisions. They help focus the analysis on plausible trip durations but do not establish that every excluded record was erroneous.
 
-Ride duration was calculated as the difference between the recorded end and start timestamps.
+### Final Dataset and Quality Checks
 
-The following records were excluded:
-
-- **Negative durations:** Removed because the recorded end time occurred before the start time.
-- **Rides shorter than one minute:** Excluded to reduce the influence of extremely short trips that could represent test rides, recording errors, or other atypical activity.
-- **Rides longer than 24 hours:** Excluded because they may represent unusual trips or recording errors rather than typical bike-share usage.
-
-Rides lasting **exactly 24 hours were retained**.
-
-These thresholds are data-cleaning decisions intended to improve consistency. The available data does not establish why each unusually short or long ride occurred, so some excluded rides may have been genuine trips. The filtering choices may affect the results and should be considered when interpreting the findings.
-
-### Analysis Period
-
-Only rides starting on or after October 1, 2025, and before October 1, 2026, were retained.
-
-### Missing Station Information
-
-Station names, station IDs, and some coordinates were missing for a substantial proportion of rides.
-
-Rides with missing station information were retained for analyses that did not require those fields. Station-level analyses used records with the necessary station information available.
-
-This approach avoids unnecessarily removing rides from unrelated analyses while acknowledging that missing station data may affect station-level findings.
-
-### Final Dataset
-
-The final cleaned dataset contained **6,007,154 rows and 22 columns**.
-
-| Validation item | Result |
+| Metric | Result |
 |---|---:|
 | Final rows | 6,007,154 |
 | Final columns | 22 |
 | Duplicate ride IDs | 0 |
 | Missing start timestamps | 0 |
 | Missing end timestamps | 0 |
-| Negative durations remaining | 0 |
-| Durations under one minute remaining | 0 |
-| Durations over 24 hours remaining | 0 |
+| Negative-duration rides | 0 |
+| Rides shorter than one minute | 0 |
+| Rides longer than 24 hours | 0 |
 | Rides outside the target period | 0 |
 
-The cleaned dataset was exported to CSV for use in SQL analysis and Tableau. The in-memory dataset and exported CSV were checked for matching dimensions and column names.
+The cleaned dataset contains **6,007,154 rides and 22 columns**.
+
+Missing station information remains a limitation. Station-level analyses exclude records without the station identifiers or names required for the specific analysis.
 
 ## Key Findings
 
-### 1. Rider Group Distribution
+### 1. Overall Rider Distribution
 
-| Rider group | Rides | Share |
+The cleaned dataset contains the following distribution:
+
+| Rider group | Number of rides | Share of rides |
 |---|---:|---:|
-| Annual members | 3,896,850 | 64.87% |
+| Members | 3,896,850 | 64.87% |
 | Casual riders | 2,110,304 | 35.13% |
 | **Total** | **6,007,154** | **100.00%** |
 
-Annual members accounted for approximately two-thirds of recorded rides, while casual riders accounted for just over one-third.
+Members account for approximately two-thirds of recorded rides. These figures describe trips, not the number of unique people.
 
-These figures represent rides, not unique individuals.
+### 2. Monthly Riding Patterns
 
-### 2. Seasonal Patterns
+![Monthly rides by rider type](figures/monthly_rides_by_rider_type.png)
 
-| Season | Casual rides (% of casual total) | Member rides (% of member total) |
+Monthly activity varies across the year.
+
+- Casual rides peak in **July**, with 345,551 rides.
+- Member rides peak in **August**, with 511,009 rides.
+- Both groups have lower activity during winter months.
+- Casual riding activity shows a stronger concentration in summer than member activity.
+
+### Seasonal Distribution
+
+| Season | Casual riders | Members |
 |---|---:|---:|
 | Winter | 4.31% | 9.66% |
 | Spring | 21.22% | 23.91% |
 | Summer | 46.36% | 37.35% |
 | Autumn | 28.11% | 29.08% |
 
-Casual rides had a stronger summer concentration: **46.36% of casual rides occurred in summer**, compared with 37.35% of member rides. This is a difference of 9.01 percentage points.
+The share of casual rides occurring in summer is **9.01 percentage points higher** than the corresponding share for members.
 
-This is a descriptive difference; the dataset does not establish why it occurs.
+**Business implication:** Summer may be a promising period to test membership campaigns. However, seasonality alone does not demonstrate that a campaign will increase conversion.
 
-### 3. Weekday and Weekend Patterns
+### 3. Weekday and Weekend Riding Patterns
 
-| Day | Casual rides (%) | Member rides (%) |
+![Ride distribution by weekday and rider type](figures/weekday_rides_by_rider_type.png)
+
+The distribution of rides across the week differs between casual riders and members.
+
+| Day | Casual riders | Members |
 |---|---:|---:|
 | Monday | 11.51% | 13.96% |
 | Tuesday | 11.45% | 16.11% |
@@ -144,156 +141,174 @@ This is a descriptive difference; the dataset does not establish why it occurs.
 | Saturday | 21.19% | 12.76% |
 | Sunday | 16.00% | 10.50% |
 
-Weekend rides accounted for **37.19% of casual rides** and **23.26% of member rides**, a difference of 13.93 percentage points.
+These percentages represent each rider group's distribution of rides across the days of the week.
 
-Casual rides were more concentrated on Saturdays and Sundays, while member rides had a stronger weekday pattern.
+| Metric | Casual riders | Members |
+|---|---:|---:|
+| Weekend share of rides | 37.19% | 23.26% |
 
-This difference suggests an opportunity to test weekend-focused membership messaging, although the data does not establish individual rider habits or trip purposes.
+The weekend share is **13.93 percentage points higher for casual riders** than for members.
 
-### 4. Hourly Patterns
+**Business implication:** Weekend-focused messaging is a reasonable hypothesis to test with casual riders. A controlled campaign would be needed to determine whether it increases membership conversion.
 
-Both rider groups recorded their largest share of rides at approximately **5 p.m.** Members showed a stronger morning pattern around typical commuting hours, particularly between 6 a.m. and 9 a.m.
+### 4. Hourly Riding Patterns
 
-The observed pattern is consistent with different usage schedules, but the dataset does not record trip purpose and therefore cannot confirm that rides were for commuting.
+Hourly activity provides additional context for when the two groups use the service.
+
+- Members show stronger morning peaks during commuting hours.
+- Both groups reach their highest hourly share at approximately 5 p.m.
+- Casual riders have a relatively larger share of rides during parts of the middle of the day and late evening.
+
+These patterns may be consistent with different use cases, but trip data alone cannot establish whether a ride was for commuting, recreation, tourism, or another purpose.
 
 ### 5. Ride Duration
 
-| Measure | Casual riders | Annual members |
+![Ride duration distribution by rider type](figures/ride_duration_distribution.png)
+
+Ride duration differs between the two rider groups.
+
+| Metric | Casual riders | Members |
 |---|---:|---:|
-| Mean duration | 18.17 minutes | 12.17 minutes |
-| Median duration | 11.14 minutes | 8.69 minutes |
+| Mean ride duration | 18.17 minutes | 12.17 minutes |
+| Median ride duration | 11.14 minutes | 8.69 minutes |
 
-Casual rides had a median duration approximately **28.2% longer** than member rides.
+The median ride duration for casual riders is approximately **28.2% longer** than the median for members.
 
-Ride durations were right-skewed, meaning that a relatively small number of longer rides influenced the mean. The median is therefore useful for comparing typical ride duration.
+The mean is higher than the median for both groups, indicating right-skewed duration distributions. A small number of longer rides can therefore influence the mean.
 
-For readability, some distribution charts display rides of 60 minutes or less. This visualisation limit does not further filter the main cleaned dataset.
+If the accompanying histogram is limited to rides of 60 minutes or less, that range should be stated in the chart title or caption. The median figures above refer to the cleaned dataset rather than only the plotted subset.
 
-### 6. Bike-Type Usage
+**Business implication:** Differences in ride duration may help inform messaging, but duration alone does not explain membership choice or prove that longer rides lead to conversion.
 
-| Bike type | Casual rides (% of casual total) | Member rides (% of member total) |
+### 6. Bike-Type Preferences
+
+![Bike-type preferences by rider type](figures/bike_type_preferences.png)
+
+The share of rides by bike type differs between casual riders and members.
+
+| Bike type | Casual riders | Members |
 |---|---:|---:|
-| Classic bike | 25.80% | 31.68% |
 | Electric bike | 74.20% | 68.32% |
+| Classic bike | 25.80% | 31.68% |
 
-Electric bikes accounted for a larger share of casual rides. The difference in electric-bike share was **5.88 percentage points**.
+Casual riders have a higher electric-bike ride share, by **5.88 percentage points**.
 
-This identifies a difference in observed bike usage, not the reason behind that difference. The data alone cannot establish whether the pattern reflects preferences, availability, trip characteristics, pricing, or other factors.
+**Business implication:** Electric-bike access or value could be explored as a potential membership message, provided that the relevant benefits and pricing are confirmed against the actual membership terms.
 
 ### 7. Station Usage
 
-The station analysis compares frequently used starting and ending stations across rider groups. The results show differences in station usage patterns.
+Station-level analysis identifies frequently used starting and ending stations for each rider group.
 
-However, station information is missing for roughly one-fifth of rides, so station-level results should be interpreted with caution. The findings describe recorded station usage and do not establish whether trips were for tourism, leisure, commuting, or another purpose.
+The analysis groups records by station identifier and name and excludes missing or blank station information where necessary.
+
+The results suggest differences in the stations frequently used by casual riders and members. These differences should be interpreted cautiously because a substantial proportion of rides lack station information.
+
+Station usage alone cannot establish a rider's purpose, demographic profile, or likelihood of becoming a member.
+
+Further station-specific findings can be explored in the interactive Tableau dashboard.
 
 ## Business Recommendations
 
-The findings suggest several hypotheses for the marketing team to test. These recommendations are proposed opportunities, not proven ways to increase membership conversion.
+The findings suggest several hypotheses that could be tested by the marketing team.
 
-### 1. Test Weekend-Focused Membership Messaging
+### 1. Test Weekend-Focused Membership Campaigns
 
-**Evidence:** Weekend rides represented 37.19% of casual rides, compared with 23.26% of member rides.
+Casual riders have a higher share of weekend rides than members.
 
-**Potential action:** Test membership messaging that highlights the value of membership for people who ride frequently on weekends.
+A campaign could test membership messaging tailored to weekend usage patterns. The campaign should be evaluated against a suitable control group to determine whether it produces additional conversions.
 
-**How to evaluate:** Compare membership conversion rates between an exposed group and a suitable control group. Also assess acquisition costs and subsequent member retention.
+### 2. Test Seasonal Campaigns
 
-### 2. Test Seasonal Membership Campaigns
+Casual riding activity is concentrated more strongly in summer.
 
-**Evidence:** Casual rides had a stronger summer concentration than member rides.
+A campaign could be tested during periods of higher casual-rider activity. Its timing and effectiveness should be evaluated using campaign and conversion data rather than assumed from ride volume alone.
 
-**Potential action:** Test summer-focused membership offers or messaging aimed at casual riders who may benefit from membership.
+### 3. Evaluate Bike-Type Messaging
 
-**How to evaluate:** Compare conversion rates between campaign and control groups, while accounting for campaign costs and subsequent membership retention.
+Casual riders have a higher electric-bike ride share.
 
-### 3. Tailor Messaging to Observed Usage Patterns
+Marketing could test whether communicating relevant electric-bike benefits affects membership interest, provided the messaging accurately reflects the available membership terms.
 
-**Evidence:** Casual and member rides differ in hourly patterns, median duration, and bike-type usage.
+### 4. Measure Outcomes Rather Than Engagement Alone
 
-**Potential action:** Test different messages for relevant usage segments, provided additional data can identify those segments reliably. Messaging about electric-bike access or value should reflect the actual membership terms and pricing.
+Campaign evaluation should focus on business outcomes such as:
 
-**How to evaluate:** Compare conversion and retention outcomes across campaign variants rather than relying only on engagement or ride counts.
+- Incremental membership conversion rate.
+- Cost per incremental conversion.
+- Membership retention after conversion.
+- Differences between campaign and control groups.
 
-### Important Qualification
+These recommendations are hypotheses derived from descriptive analysis. The current dataset does not contain campaign exposure or conversion outcomes, so it cannot establish whether the proposed campaigns will cause an increase in membership.
 
-These are **testable hypotheses, not proven conversion strategies**. The current trip dataset does not contain campaign exposure, customer-level membership transitions, or conversion outcomes. It cannot show that any recommendation will cause an increase in memberships.
+## Tableau Dashboard
 
-Controlled experiments linked to campaign and conversion data would be needed to evaluate effectiveness. Retention and incremental acquisition costs would also help determine whether any resulting conversions deliver business value.
+Explore the interactive Tableau dashboard:
 
-## Tools and Deliverables
+[**View the Cyclistic Tableau Dashboard**](https://public.tableau.com/app/profile/marcin.szczepa.ski1297/viz/Cyclistic_Ride_Behaviour_2026/Cyclistic)
 
-### Python
+The dashboard provides interactive views of rider behaviour across time, weekday, season, bike type, and station usage.
 
-Python was used for:
+It complements the Python and SQL analysis by allowing users to explore the patterns using filters.
 
-- Downloading and loading monthly source archives.
-- Combining the monthly trip-data files.
-- Inspecting data quality and cleaning the dataset.
-- Calculating ride duration and creating date and time features.
-- Conducting exploratory data analysis and visualisation.
-- Exporting the cleaned dataset.
+## Tools and Technologies
 
-**Main libraries:** pandas, NumPy, Matplotlib, and Seaborn.
+| Tool | Purpose |
+|---|---|
+| Python | Data cleaning, preparation, and exploratory analysis |
+| Pandas and NumPy | Data manipulation and calculations |
+| Matplotlib and Seaborn | Statistical and exploratory visualizations |
+| SQL / MySQL | Business-focused aggregation and analysis |
+| Tableau | Interactive dashboard and data storytelling |
+| Jupyter Notebook | Documented analytical workflow |
 
-### SQL
+## Project Files
 
-SQL was used to summarise ride behaviour and support the business analysis, including:
+The repository separates code, data, documentation, and visual outputs.
 
-- Ride volumes by rider group.
-- Monthly and seasonal patterns.
-- Weekday and hourly patterns.
-- Ride duration.
-- Bike-type usage.
-- Frequently used starting and ending stations.
+- `notebooks/` — Python notebook for data preparation and analysis.
+- `sql/` — SQL scripts for database setup and business analysis.
+- `figures/` — Selected visualizations used in this README.
+- `reports/` — Supporting reports and notes.
+- `tableau/` — Tableau-related project files, if included.
+- `data/` — Project data outputs, subject to size and sharing considerations.
+- `Original_data/` — Original source data, subject to data-sharing considerations.
 
-The SQL work was conducted in MySQL Workbench using the `cyclistic_analysis` database and the `cyclistic_rides` table.
+Large raw and processed datasets do not need to be committed to GitHub. The repository should contain the code, documentation, and selected visual outputs needed to understand the work, with instructions for obtaining the source data.
 
-SQL scripts are organised in the project's `sql/` directory.
+## Reproducibility and Quality Assurance
 
-### Tableau
+The project includes documented data-cleaning steps, quality checks, and an exported cleaned dataset used for subsequent analysis.
 
-Tableau was used to present interactive comparisons of rider behaviour, including ride volumes, temporal patterns, ride duration, bike types, and station usage. The dashboard includes filters that allow users to explore selected dimensions of the data.
+Validation performed in Python confirmed that the in-memory cleaned dataset and exported CSV had matching dimensions and column names. The final dataset contains 6,007,154 rows and 22 columns.
 
-**Published dashboard:** [View the Cyclistic Tableau dashboard](https://public.tableau.com/app/profile/marcin.szczepa.ski1297/viz/Cyclistic_Ride_Behaviour_2026/Cyclistic)
+The workflow also includes checks for duplicate ride IDs, missing timestamps, invalid durations, and records outside the target period.
 
-### Project Files
+To reproduce the analysis on another computer, users may need to:
 
-The project includes the analysis notebook, SQL scripts, and cleaned dataset used for the subsequent analysis and dashboard. The raw monthly source archives can be obtained from the [official Divvy Trip Data archive](https://divvy-tripdata.s3.amazonaws.com/index.html).
+1. Download the required monthly source files from the official data archive.
+2. Install the necessary Python libraries.
+3. Adjust local file paths where necessary.
+4. Configure MySQL and import the cleaned dataset.
+5. Open the Tableau dashboard or configure the relevant project files.
+
+The initial SQL import script uses a local file path and may need to be updated on another computer. Full cell-by-cell equality between the in-memory dataset and exported CSV was not established by the shape and column-name checks alone.
 
 ## Limitations
 
-- Each row represents a ride, not a unique person.
-- The data does not identify why a ride occurred or why a rider chose a particular membership type.
-- Campaign exposure, customer-level conversion, and retention outcomes are not available.
-- Station fields are missing for a substantial share of rides, which may affect station-level comparisons.
-- Duration thresholds exclude some genuine trips potentially captured by the source system.
-- Weather, holidays, tourism, daylight, pricing, and bike availability were not evaluated as explanatory factors.
-- The findings are descriptive and do not establish causation.
-- Results describe the selected 12-month period and may not generalise to other periods.
+Several limitations should be considered when interpreting the findings:
 
-These limitations should be considered when interpreting the findings and planning marketing experiments.
-
-## Reproducibility and Validation
-
-The workflow uses the official monthly trip-data archives and documents the main data preparation and analysis steps.
-
-The notebook includes checks of:
-
-- Dataset dimensions and column names.
-- Duplicate records and ride IDs.
-- Timestamp and ride-duration quality.
-- The selected analysis period.
-- Rider-group and bike-type counts.
-- The dimensions and column names of the in-memory dataset and exported CSV.
-
-The cleaned CSV is used for the corresponding SQL analysis and Tableau dashboard. The project also includes SQL scripts for the principal business questions.
-
-To reproduce the analysis, obtain the source data from the official archive and follow the notebook's execution order. The SQL import script currently uses a local file path that must be adjusted for another computer. Python dependencies, MySQL configuration, and Tableau access may also require environment-specific setup.
+- **Trip counts are not unique customers.** A person may generate multiple rides.
+- **No demographic information.** The dataset does not identify rider age, income, or other personal characteristics.
+- **No campaign or conversion data.** The analysis cannot determine which rides resulted in membership purchases or whether marketing caused conversion.
+- **Missing station information.** Station-level findings are based on a subset of rides with the required station data.
+- **Potential external influences.** Weather, tourism, holidays, daylight, pricing, and bike availability were not tested.
+- **Descriptive analysis.** Observed differences identify patterns and hypotheses, not causal relationships.
+- **One-year scope.** The results describe the selected 12-month period and may not generalize to other years or locations.
 
 ## Conclusion
 
-The analysis identifies clear differences between casual riders and annual members in seasonal concentration, weekend activity, hourly patterns, ride duration, and bike-type usage.
+This analysis identifies meaningful differences between casual riders and members in seasonal activity, weekend riding, ride duration, hourly patterns, and bike-type preferences.
 
-The strongest practical opportunities to investigate are weekend-focused and seasonal membership campaigns. Differences in hourly patterns, duration, and bike-type usage may also help inform future messaging experiments.
+The strongest marketing hypotheses are to test weekend-focused and seasonal campaigns, while evaluating whether bike-type messaging has an effect. These opportunities should be validated through controlled campaigns and measured using incremental conversion, acquisition cost, and retention.
 
-These opportunities should be tested with customer-level campaign and conversion data before being treated as effective strategies. The analysis provides a descriptive evidence base for deciding what to test next, rather than proof that a particular marketing intervention will increase annual memberships.
+The project demonstrates an end-to-end data analysis workflow using Python, SQL, and Tableau, translating trip-level data into business-focused findings and testable recommendations.
