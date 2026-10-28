@@ -269,11 +269,7 @@ The repository separates code, data, documentation, and visual outputs.
 - `sql/` — SQL scripts for database setup and business analysis.
 - `figures/` — Selected visualizations used in this README.
 - `reports/` — Supporting reports and notes.
-- `tableau/` — Tableau-related project files, if included.
-- `data/` — Project data outputs, subject to size and sharing considerations.
-- `Original_data/` — Original source data, subject to data-sharing considerations.
 
-Large raw and processed datasets do not need to be committed to GitHub. The repository should contain the code, documentation, and selected visual outputs needed to understand the work, with instructions for obtaining the source data.
 
 ## Reproducibility and Quality Assurance
 
